@@ -77,6 +77,31 @@ npm run build
 
 构建后的文件将位于 `build` 目录中。
 
+### 使用Docker部署
+
+本项目提供了Docker部署支持，可以轻松地在任何支持Docker的环境中部署。
+
+#### 构建Docker镜像
+
+```bash
+docker build -t web-dev-box:latest .
+```
+
+#### 运行Docker容器
+
+```bash
+docker run -d -p 80:80 --name web-dev-box web-dev-box:latest
+```
+
+应用将在 http://localhost 运行。
+
+#### Docker镜像说明
+
+- 使用多阶段构建，生成更小的生产镜像
+- 基于Nginx提供静态文件服务
+- 配置了适当的缓存策略和Gzip压缩
+- 支持React Router的客户端路由
+
 ## 项目结构
 
 ```
