@@ -1,5 +1,5 @@
 # 第一阶段：构建应用
-FROM node:18-alpine AS build
+FROM registry.cn-hangzhou.aliyuncs.com/hatlonely/node:18-alpine AS build
 
 # 设置工作目录
 WORKDIR /app
@@ -17,7 +17,7 @@ COPY . .
 RUN npm run build
 
 # 第二阶段：部署应用
-FROM nginx:stable-alpine
+FROM registry.cn-hangzhou.aliyuncs.com/hatlonely/nginx:stable-alpine
 
 # 复制Nginx配置
 COPY nginx.conf /etc/nginx/conf.d/default.conf
