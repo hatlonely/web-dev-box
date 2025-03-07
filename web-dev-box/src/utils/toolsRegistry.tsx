@@ -12,8 +12,10 @@ import {
   Html5Outlined,
   LockOutlined,
   SafetyOutlined,
-  FileTextTwoTone,
   FontSizeOutlined,
+  FileOutlined,
+  FileMarkdownOutlined,
+  CompressOutlined,
 } from '@ant-design/icons';
 
 // 导入工具组件
@@ -22,6 +24,7 @@ import Base64Tool from '../components/tools/encoding/Base64Tool';
 import UrlEncodeTool from '../components/tools/encoding/UrlEncodeTool';
 import HtmlEncodeTool from '../components/tools/encoding/HtmlEncodeTool';
 import JwtDecoderTool from '../components/tools/encoding/JwtDecoderTool';
+import GzipTool from '../components/tools/encoding/GzipTool';
 
 // 转换工具
 import TimestampTool from '../components/tools/conversion/TimestampTool';
@@ -30,6 +33,7 @@ import JsonYamlTool from '../components/tools/conversion/JsonYamlTool';
 
 // 格式化工具
 import JsonFormatterTool from '../components/tools/formatter/JsonFormatterTool';
+import XmlFormatterTool from '../components/tools/formatter/XmlFormatterTool';
 
 // 生成工具
 import PasswordGeneratorTool from '../components/tools/generation/PasswordGeneratorTool';
@@ -38,6 +42,9 @@ import LoremIpsumGeneratorTool from '../components/tools/generation/LoremIpsumGe
 
 // 测试工具
 import RegexTesterTool from '../components/tools/tester/RegexTesterTool';
+
+// 文本工具
+import MarkdownPreviewTool from '../components/tools/text/MarkdownPreviewTool';
 
 // 注册所有工具
 export const tools: Tool[] = [
@@ -73,6 +80,14 @@ export const tools: Tool[] = [
     icon: 'LockOutlined',
     category: ToolCategory.ENCODING,
     component: JwtDecoderTool,
+  },
+  {
+    id: 'gzip',
+    name: 'GZip 编码/解码',
+    description: '使用GZip算法压缩或解压文本数据',
+    icon: 'CompressOutlined',
+    category: ToolCategory.ENCODING,
+    component: GzipTool,
   },
 
   // 转换工具
@@ -110,6 +125,14 @@ export const tools: Tool[] = [
     category: ToolCategory.FORMATTER,
     component: JsonFormatterTool,
   },
+  {
+    id: 'xml-formatter',
+    name: 'XML 格式化',
+    description: '美化或压缩XML数据，调整缩进和格式',
+    icon: 'FileOutlined',
+    category: ToolCategory.FORMATTER,
+    component: XmlFormatterTool,
+  },
 
   // 生成工具
   {
@@ -146,6 +169,16 @@ export const tools: Tool[] = [
     category: ToolCategory.TESTER,
     component: RegexTesterTool,
   },
+
+  // 文本工具
+  {
+    id: 'markdown-preview',
+    name: 'Markdown 预览',
+    description: '编辑和预览Markdown文本，实时查看渲染效果',
+    icon: 'FileMarkdownOutlined',
+    category: ToolCategory.TEXT,
+    component: MarkdownPreviewTool,
+  },
 ];
 
 // 获取工具图标组件
@@ -173,10 +206,14 @@ export const getToolIcon = (iconName: string): React.ReactNode => {
       return <LockOutlined />;
     case 'SafetyOutlined':
       return <SafetyOutlined />;
-    case 'FileTextTwoTone':
-      return <FileTextTwoTone />;
     case 'FontSizeOutlined':
       return <FontSizeOutlined />;
+    case 'FileOutlined':
+      return <FileOutlined />;
+    case 'FileMarkdownOutlined':
+      return <FileMarkdownOutlined />;
+    case 'CompressOutlined':
+      return <CompressOutlined />;
     default:
       return <CodeOutlined />;
   }
