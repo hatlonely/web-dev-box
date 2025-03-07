@@ -1,6 +1,6 @@
 import React from 'react';
 import { Layout, Menu, Typography } from 'antd';
-import { GithubOutlined, ToolOutlined } from '@ant-design/icons';
+import { HomeOutlined, ToolOutlined } from '@ant-design/icons';
 import { Link, Outlet } from 'react-router-dom';
 
 const { Header, Content, Footer } = Layout;
@@ -26,15 +26,7 @@ const MainLayout: React.FC = () => {
           items={[
             {
               key: '1',
-              label: <Link to="/">首页</Link>,
-            },
-            {
-              key: '2',
-              label: (
-                <a href="https://github.com/hatlonely/web-dev-box" target="_blank" rel="noopener noreferrer">
-                  <GithubOutlined /> GitHub
-                </a>
-              ),
+              label: <Link to="/"><HomeOutlined /></Link>,
             },
           ]}
         />

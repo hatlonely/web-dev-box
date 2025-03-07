@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Input, Row, Col, Card, Tabs, Typography, Empty, Divider } from 'antd';
+import { Input, Row, Col, Card, Tabs, Empty, Divider } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import ToolCard from '../components/common/ToolCard';
 import { Tool, ToolCategory } from '../utils/types';
 import { tools, getAllCategories, searchTools, getToolsByCategory, getToolIcon } from '../utils/toolsRegistry';
-
-const { Title, Paragraph } = Typography;
 
 const HomePage: React.FC = () => {
   const [searchKeyword, setSearchKeyword] = useState('');
@@ -60,7 +58,7 @@ const HomePage: React.FC = () => {
       }
     ];
 
-    categories.forEach(category => {
+    categories.forEach((category: ToolCategory) => {
       items.push({
         key: category,
         label: category,
@@ -73,11 +71,6 @@ const HomePage: React.FC = () => {
 
   return (
     <div style={{ padding: 24 }}>
-      <div style={{ textAlign: 'center', marginBottom: 48 }}>
-        <Title>开发者工具箱</Title>
-        <Paragraph>集成常用的开发工具，提高开发效率</Paragraph>
-      </div>
-
       <Card style={{ marginBottom: 24 }}>
         <Input
           size="large"
