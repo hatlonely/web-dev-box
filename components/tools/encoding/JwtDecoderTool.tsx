@@ -246,7 +246,7 @@ const JwtDecoderTool: React.FC = () => {
         {/* 说明区域 */}
         <Divider />
         <div style={{ marginTop: 16 }}>
-          <Title level={4}><InfoCircleOutlined /> 关于JWT</Title>
+          <Title level={4}>关于JWT</Title>
           <Paragraph>
             JSON Web Token (JWT) 是一种开放标准 (RFC 7519)，它定义了一种紧凑且自包含的方式，用于在各方之间安全地传输信息作为JSON对象。
           </Paragraph>

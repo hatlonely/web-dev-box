@@ -186,16 +186,12 @@ const GzipTool: React.FC = () => {
       {/* 输入区域 */}
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Tabs activeKey={activeTab} onChange={handleTabChange}>
-            <TabPane tab="文本" key="text">
-              <TextArea
-                rows={10}
-                value={input}
-                onChange={handleInputChange}
-                placeholder={action === 'compress' ? '输入要压缩的文本' : '输入要解压的Base64编码字符串'}
-              />
-            </TabPane>
-          </Tabs>
+            <TextArea
+              rows={10}
+              value={input}
+              onChange={handleInputChange}
+              placeholder={action === 'compress' ? '输入要压缩的文本' : '输入要解压的Base64编码字符串'}
+            />
         </Col>
 
         {error && (
@@ -229,7 +225,7 @@ const GzipTool: React.FC = () => {
       {/* 说明区域 */}
       <Divider />
       <div style={{ marginTop: 16 }}>
-        <Title level={4}><InfoCircleOutlined /> GZip 编码说明</Title>
+        <Title level={4}>GZip 编码说明</Title>
         <Paragraph>
           GZip是一种数据压缩格式，通常用于减小文件大小，加快网络传输速度。
         </Paragraph>
