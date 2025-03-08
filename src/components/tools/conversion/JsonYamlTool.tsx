@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Input, Button, Row, Col, Space, Typography, message, Radio } from 'antd';
-import { SwapOutlined, CopyOutlined } from '@ant-design/icons';
+import { CopyOutlined } from '@ant-design/icons';
 import type { RadioChangeEvent } from 'antd';
 import yaml from 'js-yaml';
 

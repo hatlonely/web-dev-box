@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Input, Button, Row, Col, Space, Typography, Radio, Table, message, Card } from 'antd';
 import { CopyOutlined } from '@ant-design/icons';
 import type { RadioChangeEvent } from 'antd';

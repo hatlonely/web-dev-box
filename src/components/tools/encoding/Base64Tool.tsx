@@ -18,6 +18,7 @@ const Base64Tool: React.FC = () => {
   }, [input]);
 
   // 组件加载时自动执行一次编码
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     handleEncode();
   }, []); // 空依赖数组，只在组件挂载时执行一次

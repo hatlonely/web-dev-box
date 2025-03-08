@@ -63,7 +63,7 @@ const PasswordGeneratorTool: React.FC = () => {
       if (includeUppercase && !/[A-Z]/.test(newPassword)) validPassword = false;
       if (includeLowercase && !/[a-z]/.test(newPassword)) validPassword = false;
       if (includeNumbers && !/[0-9]/.test(newPassword)) validPassword = false;
-      if (includeSymbols && !/[!@#$%^&*()_+\-=\[\]{}|;:,.<>?]/.test(newPassword)) validPassword = false;
+      if (includeSymbols && !/[!@#$%^&*()_+\-=[\]{}|;:,.<>?]/.test(newPassword)) validPassword = false;
 
       if (!validPassword) {
         // 重新生成密码
@@ -124,6 +124,7 @@ const PasswordGeneratorTool: React.FC = () => {
   };
 
   // 初始生成密码
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     generatePassword();
   }, []);

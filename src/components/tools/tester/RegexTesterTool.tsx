@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Input, Button, Row, Col, Space, Typography, Switch, Table, message, Card, Tag } from 'antd';
-import { CopyOutlined } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
 
 const { TextArea } = Input;
