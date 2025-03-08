@@ -261,6 +261,17 @@ const IpInfoTool: React.FC = () => {
     setIsValidIp(isValidIpAddress(value));
   };
 
+  // 处理键盘事件，支持回车键直接查询
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    // 当按下回车键且没有按住 Shift 键时触发查询
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault(); // 阻止默认的换行行为
+      if (isValidIp && ipAddress) {
+        fetchIpInfo(ipAddress);
+      }
+    }
+  };
+
   // 查询按钮点击事件
   const handleQuery = () => {
     fetchIpInfo(ipAddress);
@@ -303,6 +314,7 @@ const IpInfoTool: React.FC = () => {
             <TextArea
               value={ipAddress}
               onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
               placeholder="输入IP地址或使用本机IP"
               autoSize={{ minRows: 1, maxRows: 1 }}
               style={{ fontFamily: 'monospace' }}

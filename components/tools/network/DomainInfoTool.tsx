@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { Input, Button, Row, Col, Space, Typography, Card, Table, Tabs, Divider, message, Spin } from 'antd';
-import { CopyOutlined, SearchOutlined } from '@ant-design/icons';
+import { CopyOutlined, LinkOutlined } from '@ant-design/icons';
 
 const { TextArea } = Input;
 const { Title, Text, Paragraph } = Typography;
@@ -56,8 +56,8 @@ const DomainInfoTool: React.FC = () => {
 
     try {
       // 调用服务端 API 获取域名信息
-      // 注意：这里使用完整的 URL，确保能够访问到 Next.js 服务器
-      const response = await fetch(`http://localhost:3000/api/domain-info?domain=${encodeURIComponent(domain)}`);
+      // 使用相对路径，自动适应不同环境（开发环境和生产环境）
+      const response = await fetch(`/api/domain-info?domain=${encodeURIComponent(domain)}`);
 
       if (!response.ok) {
         throw new Error(`API 请求失败: ${response.status} ${response.statusText}`);
@@ -91,6 +91,17 @@ const DomainInfoTool: React.FC = () => {
     const value = e.target.value;
     setDomain(value);
     setIsValidDomain(isValidDomainName(value));
+  };
+
+  // 处理键盘事件，支持回车键直接查询
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    // 当按下回车键且没有按住 Shift 键时触发查询
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault(); // 阻止默认的换行行为
+      if (isValidDomain && domain) {
+        fetchDomainInfo(domain);
+      }
+    }
   };
 
   // 查询按钮点击事件
@@ -162,6 +173,7 @@ const DomainInfoTool: React.FC = () => {
             <TextArea
               value={domain}
               onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
               placeholder="输入域名，如 example.com"
               autoSize={{ minRows: 1, maxRows: 1 }}
               style={{ fontFamily: 'monospace' }}
@@ -177,7 +189,7 @@ const DomainInfoTool: React.FC = () => {
             <Space>
               <Button
                 type="primary"
-                icon={<SearchOutlined />}
+                icon={<LinkOutlined />}
                 onClick={handleQuery}
                 disabled={!isValidDomain || !domain}
               >
