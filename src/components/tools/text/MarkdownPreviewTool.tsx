@@ -28,7 +28,7 @@ type ThemeType = 'light' | 'dark';
 // 定义代码高亮主题映射
 const codeThemeMap = {
   light: { value: 'oneLight', style: oneLight },
-  dark: { value: 'vscDarkPlus', style: vscDarkPlus }
+  dark: { value: 'oneDark', style: oneDark }
 };
 
 // Markdown主题样式
