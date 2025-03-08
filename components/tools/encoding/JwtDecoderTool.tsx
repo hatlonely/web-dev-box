@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Input, Button, Row, Col, Space, Typography, Tabs, Card, message } from 'antd';
-import { CopyOutlined } from '@ant-design/icons';
+import { Input, Button, Row, Col, Space, Typography, Tabs, Card, message, Divider } from 'antd';
+import { CopyOutlined, InfoCircleOutlined } from '@ant-design/icons';
 
 const { TextArea } = Input;
 const { Title, Text, Paragraph } = Typography;
@@ -106,6 +106,35 @@ const JwtDecoderTool: React.FC = () => {
     <div style={{ padding: 24 }}>
       <Title level={2}>JWT 解码器</Title>
 
+      {/* 选项和操作按钮区域 */}
+      <Row justify="space-between" align="middle" style={{ marginBottom: 16 }}>
+        {/* 左侧：操作按钮 */}
+        <Col>
+          <Button
+            type="primary"
+            onClick={() => decodeJwt(jwtToken)}
+            size="middle"
+            style={{ marginRight: 8 }}
+          >
+            解码
+          </Button>
+          <Button
+            onClick={handleLoadExample}
+            size="middle"
+            style={{ marginRight: 8 }}
+          >
+            示例JWT
+          </Button>
+          <Button
+            onClick={handleClear}
+            size="middle"
+          >
+            清空
+          </Button>
+        </Col>
+      </Row>
+
+      {/* 输入区域 */}
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <TextArea
@@ -114,20 +143,6 @@ const JwtDecoderTool: React.FC = () => {
             onChange={(e) => setJwtToken(e.target.value)}
             placeholder="输入JWT令牌（格式：xxxxx.yyyyy.zzzzz）"
           />
-        </Col>
-
-        <Col span={24}>
-          <Space>
-            <Button type="primary" onClick={() => decodeJwt(jwtToken)}>
-              解码
-            </Button>
-            <Button onClick={handleLoadExample}>
-              示例JWT
-            </Button>
-            <Button onClick={handleClear}>
-              清空
-            </Button>
-          </Space>
         </Col>
 
         {error && (
@@ -228,8 +243,10 @@ const JwtDecoderTool: React.FC = () => {
           </Col>
         )}
 
-        <Col span={24}>
-          <Title level={4}>关于JWT</Title>
+        {/* 说明区域 */}
+        <Divider />
+        <div style={{ marginTop: 16 }}>
+          <Title level={4}><InfoCircleOutlined /> 关于JWT</Title>
           <Paragraph>
             JSON Web Token (JWT) 是一种开放标准 (RFC 7519)，它定义了一种紧凑且自包含的方式，用于在各方之间安全地传输信息作为JSON对象。
           </Paragraph>
@@ -247,7 +264,7 @@ const JwtDecoderTool: React.FC = () => {
               <Text strong>签名 (Signature)</Text> - 用于验证消息在传输过程中没有被更改，并且对于使用私钥签名的令牌，它还可以验证JWT的发送方是否为它所称的发送方
             </li>
           </ul>
-        </Col>
+        </div>
       </Row>
     </div>
   );

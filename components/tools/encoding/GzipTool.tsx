@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { Input, Button, Row, Col, Space, Typography, Radio, message, Tabs } from 'antd';
-import { CopyOutlined, CompressOutlined, ExpandOutlined } from '@ant-design/icons';
+import { Input, Button, Row, Col, Space, Typography, Radio, message, Tabs, Divider } from 'antd';
+import { CopyOutlined, CompressOutlined, ExpandOutlined, InfoCircleOutlined, SwapOutlined } from '@ant-design/icons';
 import type { RadioChangeEvent } from 'antd';
 import * as pako from 'pako';
 
 const { TextArea } = Input;
-const { Title, Text } = Typography;
+const { Title, Text, Paragraph } = Typography;
 const { TabPane } = Tabs;
+const { Group: RadioGroup, Button: RadioButton } = Radio;
 
 type ActionType = 'compress' | 'decompress';
 
@@ -107,6 +108,14 @@ const GzipTool: React.FC = () => {
     setError(null);
   };
 
+  // 切换模式（压缩/解压）
+  const handleSwitch = () => {
+    setAction(action === 'compress' ? 'decompress' : 'compress');
+    setInput(output);
+    setOutput('');
+    setError(null);
+  };
+
   const handleSampleData = () => {
     if (action === 'compress') {
       setInput('这是一段示例文本，用于演示GZip压缩功能。GZip是一种数据压缩格式，通常用于减小文件大小，加快网络传输速度。');
@@ -121,20 +130,61 @@ const GzipTool: React.FC = () => {
     <div style={{ padding: 24 }}>
       <Title level={2}>GZip 编码/解码</Title>
 
-      <Row gutter={[16, 16]}>
-        <Col span={24}>
-          <Space>
-            <Radio.Group value={action} onChange={handleActionChange} buttonStyle="solid">
-              <Radio.Button value="compress">
-                <CompressOutlined /> 压缩
-              </Radio.Button>
-              <Radio.Button value="decompress">
-                <ExpandOutlined /> 解压
-              </Radio.Button>
-            </Radio.Group>
-          </Space>
+      {/* 选项和操作按钮区域 */}
+      <Row justify="space-between" align="middle" style={{ marginBottom: 16 }}>
+        {/* 左侧：操作按钮 */}
+        <Col>
+          <Button
+            type="primary"
+            onClick={handleProcess}
+            size="middle"
+            style={{ marginRight: 8 }}
+          >
+            {action === 'compress' ? '压缩' : '解压'}
+          </Button>
+          <Button
+            icon={<SwapOutlined />}
+            onClick={handleSwitch}
+            size="middle"
+            style={{ marginRight: 8 }}
+          >
+            切换模式
+          </Button>
+          <Button
+            onClick={handleSampleData}
+            size="middle"
+            style={{ marginRight: 8 }}
+          >
+            示例数据
+          </Button>
+          <Button
+            onClick={handleClear}
+            size="middle"
+          >
+            清空
+          </Button>
         </Col>
 
+        {/* 右侧：压缩/解压选项 */}
+        <Col>
+          <RadioGroup
+            value={action}
+            onChange={handleActionChange}
+            optionType="button"
+            buttonStyle="solid"
+          >
+            <RadioButton value="compress">
+              <CompressOutlined /> 压缩
+            </RadioButton>
+            <RadioButton value="decompress">
+              <ExpandOutlined /> 解压
+            </RadioButton>
+          </RadioGroup>
+        </Col>
+      </Row>
+
+      {/* 输入区域 */}
+      <Row gutter={[16, 16]}>
         <Col span={24}>
           <Tabs activeKey={activeTab} onChange={handleTabChange}>
             <TabPane tab="文本" key="text">
@@ -146,20 +196,6 @@ const GzipTool: React.FC = () => {
               />
             </TabPane>
           </Tabs>
-        </Col>
-
-        <Col span={24}>
-          <Space>
-            <Button type="primary" onClick={handleProcess}>
-              {action === 'compress' ? '压缩' : '解压'}
-            </Button>
-            <Button onClick={handleSampleData}>
-              示例数据
-            </Button>
-            <Button onClick={handleClear}>
-              清空
-            </Button>
-          </Space>
         </Col>
 
         {error && (
@@ -190,33 +226,36 @@ const GzipTool: React.FC = () => {
         </Col>
       </Row>
 
-      <Row style={{ marginTop: 24 }}>
-        <Col span={24}>
-          <Title level={4}>使用说明</Title>
-          <ul>
-            <li>
-              <Text>
-                <strong>压缩</strong>：将文本压缩为GZip格式，并以Base64编码表示
-              </Text>
-            </li>
-            <li>
-              <Text>
-                <strong>解压</strong>：将Base64编码的GZip数据解压为原始文本
-              </Text>
-            </li>
-            <li>
-              <Text>
-                GZip压缩通常可以减小文本数据的大小，特别是对于重复内容较多的文本
-              </Text>
-            </li>
-            <li>
-              <Text>
-                压缩后的数据以Base64编码表示，便于在文本环境中传输
-              </Text>
-            </li>
-          </ul>
-        </Col>
-      </Row>
+      {/* 说明区域 */}
+      <Divider />
+      <div style={{ marginTop: 16 }}>
+        <Title level={4}><InfoCircleOutlined /> GZip 编码说明</Title>
+        <Paragraph>
+          GZip是一种数据压缩格式，通常用于减小文件大小，加快网络传输速度。
+        </Paragraph>
+        <ul>
+          <li>
+            <Text>
+              <strong>压缩</strong>：将文本压缩为GZip格式，并以Base64编码表示
+            </Text>
+          </li>
+          <li>
+            <Text>
+              <strong>解压</strong>：将Base64编码的GZip数据解压为原始文本
+            </Text>
+          </li>
+          <li>
+            <Text>
+              GZip压缩通常可以减小文本数据的大小，特别是对于重复内容较多的文本
+            </Text>
+          </li>
+          <li>
+            <Text>
+              压缩后的数据以Base64编码表示，便于在文本环境中传输
+            </Text>
+          </li>
+        </ul>
+      </div>
     </div>
   );
 };
