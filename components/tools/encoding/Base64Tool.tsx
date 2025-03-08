@@ -7,7 +7,7 @@ const { Title, Text } = Typography;
 
 const Base64Tool: React.FC = () => {
   // 添加默认输入文本
-  const [input, setInput] = useState('Hello, World!');
+  const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
   const [mode, setMode] = useState<'encode' | 'decode'>('encode');
   const [debugInfo, setDebugInfo] = useState<string>('');
@@ -128,12 +128,6 @@ const Base64Tool: React.FC = () => {
           </Space>
         </Col>
 
-        {/* 调试信息 */}
-        <Col span={24}>
-          <div style={{ marginTop: 16, padding: 16, background: '#f5f5f5', borderRadius: 4 }}>
-            <Text type="secondary">调试信息: {debugInfo}</Text>
-          </div>
-        </Col>
       </Row>
     </div>
   );
