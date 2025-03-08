@@ -18,6 +18,7 @@ import {
   CompressOutlined,
   DatabaseOutlined,
   GlobalOutlined,
+  CloudServerOutlined,
 } from '@ant-design/icons';
 // 导入工具组件
 // 编码/解码工具
@@ -29,6 +30,8 @@ import GzipTool from '../components/tools/encoding/GzipTool';
 
 // 网络工具
 import IpInfoTool from '../components/tools/network/IpInfoTool';
+import DomainInfoTool from '../components/tools/network/DomainInfoTool';
+import DomainInfoToolSSR from '../components/tools/network/DomainInfoToolSSR';
 
 // 转换工具
 import TimestampTool from '../components/tools/conversion/TimestampTool';
@@ -202,6 +205,22 @@ export const tools: Tool[] = [
     category: ToolCategory.NETWORK,
     component: IpInfoTool,
   },
+  {
+    id: 'domain-info',
+    name: '域名信息查询',
+    description: '查询域名的WHOIS信息、DNS记录和其他相关信息',
+    icon: 'GlobalOutlined',
+    category: ToolCategory.NETWORK,
+    component: DomainInfoTool,
+  },
+  {
+    id: 'domain-info-ssr',
+    name: '域名信息查询 (SSR版)',
+    description: '使用服务端渲染技术查询域名的WHOIS信息和DNS记录，突破浏览器限制',
+    icon: 'CloudServerOutlined',
+    category: ToolCategory.NETWORK,
+    component: DomainInfoToolSSR,
+  },
 ];
 
 // 获取工具图标组件
@@ -241,6 +260,8 @@ export const getToolIcon = (iconName: string): React.ReactNode => {
       return <DatabaseOutlined />;
     case 'GlobalOutlined':
       return <GlobalOutlined />;
+    case 'CloudServerOutlined':
+      return <CloudServerOutlined />;
     default:
       return <CodeOutlined />;
   }
