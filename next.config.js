@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // 允许跨域请求
+  // 允许跨域请求和设置内容安全策略
   async headers() {
     return [
       {
@@ -11,6 +11,20 @@ const nextConfig = {
           { key: 'Access-Control-Allow-Origin', value: '*' },
           { key: 'Access-Control-Allow-Methods', value: 'GET,OPTIONS,PATCH,DELETE,POST,PUT' },
           { key: 'Access-Control-Allow-Headers', value: 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version' },
+        ],
+      },
+      {
+        // 为所有页面添加内容安全策略
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://*; font-src 'self'; object-src 'none'; media-src 'self'; child-src 'self'; frame-src 'self'; worker-src 'self' blob:; manifest-src 'self'; form-action 'self'; base-uri 'self'; frame-ancestors 'self'"
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'clipboard-write=self'
+          }
         ],
       },
     ];
