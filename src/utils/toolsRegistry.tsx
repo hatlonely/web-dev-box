@@ -16,6 +16,7 @@ import {
   FileOutlined,
   FileMarkdownOutlined,
   CompressOutlined,
+  DatabaseOutlined,
 } from '@ant-design/icons';
 
 // 导入工具组件
@@ -39,6 +40,7 @@ import XmlFormatterTool from '../components/tools/formatter/XmlFormatterTool';
 import PasswordGeneratorTool from '../components/tools/generation/PasswordGeneratorTool';
 import HashGeneratorTool from '../components/tools/generation/HashGeneratorTool';
 import LoremIpsumGeneratorTool from '../components/tools/generation/LoremIpsumGeneratorTool';
+import MongoIdTool from '../components/tools/generation/MongoIdTool';
 
 // 测试工具
 import RegexTesterTool from '../components/tools/tester/RegexTesterTool';
@@ -152,6 +154,14 @@ export const tools: Tool[] = [
     component: HashGeneratorTool,
   },
   {
+    id: 'mongo-id',
+    name: 'MongoDB ID 工具',
+    description: '生成和解析MongoDB的ObjectId，查看其组成部分和创建时间',
+    icon: 'DatabaseOutlined',
+    category: ToolCategory.GENERATION,
+    component: MongoIdTool,
+  },
+  {
     id: 'lorem-ipsum-generator',
     name: 'Lorem Ipsum 生成器',
     description: '生成拉丁文或中文的Lorem Ipsum假文本，用于排版和设计',
@@ -214,6 +224,8 @@ export const getToolIcon = (iconName: string): React.ReactNode => {
       return <FileMarkdownOutlined />;
     case 'CompressOutlined':
       return <CompressOutlined />;
+    case 'DatabaseOutlined':
+      return <DatabaseOutlined />;
     default:
       return <CodeOutlined />;
   }
