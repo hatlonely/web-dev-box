@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+ import { ReactNode } from 'react';
 
 export enum ToolCategory {
   ENCODING = '编码/解码',
@@ -7,6 +7,7 @@ export enum ToolCategory {
   GENERATION = '生成工具',
   TESTER = '测试工具',
   TEXT = '文本工具',
+  NETWORK = '网络工具',
 }
 
 export interface Tool {

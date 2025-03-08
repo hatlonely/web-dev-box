@@ -17,8 +17,8 @@ import {
   FileMarkdownOutlined,
   CompressOutlined,
   DatabaseOutlined,
+  GlobalOutlined,
 } from '@ant-design/icons';
-
 // 导入工具组件
 // 编码/解码工具
 import Base64Tool from '../components/tools/encoding/Base64Tool';
@@ -26,6 +26,9 @@ import UrlEncodeTool from '../components/tools/encoding/UrlEncodeTool';
 import HtmlEncodeTool from '../components/tools/encoding/HtmlEncodeTool';
 import JwtDecoderTool from '../components/tools/encoding/JwtDecoderTool';
 import GzipTool from '../components/tools/encoding/GzipTool';
+
+// 网络工具
+import IpInfoTool from '../components/tools/network/IpInfoTool';
 
 // 转换工具
 import TimestampTool from '../components/tools/conversion/TimestampTool';
@@ -189,6 +192,16 @@ export const tools: Tool[] = [
     category: ToolCategory.TEXT,
     component: MarkdownPreviewTool,
   },
+
+  // 网络工具
+  {
+    id: 'ip-info',
+    name: 'IP 信息查询',
+    description: '查询IP地址的地理位置、ISP和其他相关信息',
+    icon: 'GlobalOutlined',
+    category: ToolCategory.NETWORK,
+    component: IpInfoTool,
+  },
 ];
 
 // 获取工具图标组件
@@ -226,6 +239,8 @@ export const getToolIcon = (iconName: string): React.ReactNode => {
       return <CompressOutlined />;
     case 'DatabaseOutlined':
       return <DatabaseOutlined />;
+    case 'GlobalOutlined':
+      return <GlobalOutlined />;
     default:
       return <CodeOutlined />;
   }
