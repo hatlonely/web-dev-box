@@ -1,11 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
-  // 配置 API 路由
-  api: {
-    bodyParser: true,
-  },
   // 允许跨域请求
   async headers() {
     return [
@@ -20,6 +15,22 @@ const nextConfig = {
       },
     ];
   },
+  // 编译 node_modules 中的特定包
+  transpilePackages: [
+    'antd',
+    'rc-util',
+    'rc-picker',
+    'rc-table',
+    'rc-field-form',
+    'rc-motion',
+    'rc-dropdown',
+    'rc-menu',
+    'rc-notification',
+    'rc-tooltip',
+    'rc-tree',
+    'rc-select',
+    'react-syntax-highlighter'
+  ],
 };
 
 module.exports = nextConfig;
