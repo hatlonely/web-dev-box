@@ -1,10 +1,9 @@
 import React, { useState, useCallback } from 'react';
-import { Input, Button, Row, Col, Space, Typography, Card, Table, Tabs, Divider, message, Spin } from 'antd';
+import { Input, Button, Row, Col, Space, Typography, Card, Table, Divider, message, Spin } from 'antd';
 import { CopyOutlined, LinkOutlined } from '@ant-design/icons';
 
 const { TextArea } = Input;
 const { Title, Text, Paragraph } = Typography;
-const { TabPane } = Tabs;
 
 interface DomainInfo {
   key: string;
@@ -34,7 +33,7 @@ const DomainInfoTool: React.FC = () => {
   const [isValidDomain, setIsValidDomain] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<string>('1');
+  // 不再需要标签页状态
 
   // 验证域名格式
   const isValidDomainName = useCallback((domain: string): boolean => {
@@ -109,10 +108,7 @@ const DomainInfoTool: React.FC = () => {
     fetchDomainInfo(domain);
   };
 
-  // 标签页切换事件
-  const handleTabChange = (activeKey: string) => {
-    setActiveTab(activeKey);
-  };
+  // 不再需要标签页切换事件
 
   const whoisColumns = [
     {
@@ -222,38 +218,43 @@ const DomainInfoTool: React.FC = () => {
       ) : (
         (whoisInfo.length > 0 || dnsRecords.length > 0) && (
           <Card>
-            <Tabs activeKey={activeTab} onChange={handleTabChange}>
-              <TabPane tab="WHOIS 信息" key="1">
-                {whoisInfo.length > 0 ? (
-                  <Table
-                    columns={whoisColumns}
-                    dataSource={whoisInfo}
-                    pagination={false}
-                    bordered
-                    size="middle"
-                  />
-                ) : (
-                  <div style={{ textAlign: 'center', padding: '20px 0' }}>
-                    <Text type="warning">未找到 WHOIS 信息</Text>
-                  </div>
-                )}
-              </TabPane>
-              <TabPane tab="DNS 记录" key="2">
-                {dnsRecords.length > 0 ? (
-                  <Table
-                    columns={dnsColumns}
-                    dataSource={dnsRecords}
-                    pagination={false}
-                    bordered
-                    size="middle"
-                  />
-                ) : (
-                  <div style={{ textAlign: 'center', padding: '20px 0' }}>
-                    <Text type="warning">未找到 DNS 记录</Text>
-                  </div>
-                )}
-              </TabPane>
-            </Tabs>
+            {/* DNS 记录放在 WHOIS 信息上面 */}
+            <div style={{ marginBottom: 24 }}>
+              <Title level={4}>DNS 记录</Title>
+              {dnsRecords.length > 0 ? (
+                <Table
+                  columns={dnsColumns}
+                  dataSource={dnsRecords}
+                  pagination={false}
+                  bordered
+                  size="middle"
+                />
+              ) : (
+                <div style={{ textAlign: 'center', padding: '20px 0' }}>
+                  <Text type="warning">未找到 DNS 记录</Text>
+                </div>
+              )}
+            </div>
+
+            <Divider />
+
+            {/* WHOIS 信息 */}
+            <div>
+              <Title level={4}>WHOIS 信息</Title>
+              {whoisInfo.length > 0 ? (
+                <Table
+                  columns={whoisColumns}
+                  dataSource={whoisInfo}
+                  pagination={false}
+                  bordered
+                  size="middle"
+                />
+              ) : (
+                <div style={{ textAlign: 'center', padding: '20px 0' }}>
+                  <Text type="warning">未找到 WHOIS 信息</Text>
+                </div>
+              )}
+            </div>
           </Card>
         )
       )}
@@ -264,7 +265,7 @@ const DomainInfoTool: React.FC = () => {
         <Col span={24}>
           <Title level={4}>关于域名信息</Title>
           <Paragraph>
-            域名信息查询工具可以帮助您获取域名的注册信息和DNS记录。本工具使用 Next.js 服务端渲染技术，在服务器端执行查询，避免浏览器跨域限制。
+            域名信息查询工具可以帮助您了解域名的基本信息和DNS记录。
           </Paragraph>
           <ul>
             <li>
@@ -275,26 +276,6 @@ const DomainInfoTool: React.FC = () => {
             <li>
               <Text>
                 <strong>DNS 记录</strong>：包含域名的各种DNS记录，如A记录、AAAA记录、MX记录、NS记录、TXT记录等。
-              </Text>
-            </li>
-          </ul>
-          <Paragraph>
-            <strong>服务端渲染优势：</strong>
-          </Paragraph>
-          <ul>
-            <li>
-              <Text>
-                <strong>无跨域限制</strong>：服务器可以直接请求任何域名的信息，不受浏览器同源策略限制
-              </Text>
-            </li>
-            <li>
-              <Text>
-                <strong>更高效的查询</strong>：服务器可以直接使用 DNS 和 WHOIS 协议查询，而不需要依赖第三方 API
-              </Text>
-            </li>
-            <li>
-              <Text>
-                <strong>更好的性能</strong>：减少客户端的网络请求，提高查询速度
               </Text>
             </li>
           </ul>

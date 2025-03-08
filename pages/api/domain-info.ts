@@ -77,7 +77,7 @@ async function fetchWhoisInfo(domain: string): Promise<DomainInfo[]> {
     // npm install whois
     // 然后使用它来查询真实的 WHOIS 信息
 
-    // 模拟 WHOIS 信息
+    // 模拟 WHOIS 信息 - 只包含用户关心的域名信息
     const info: DomainInfo[] = [
       {
         key: '1',
@@ -87,45 +87,27 @@ async function fetchWhoisInfo(domain: string): Promise<DomainInfo[]> {
       },
       {
         key: '2',
-        field: '服务端查询',
-        value: '此信息由服务器端获取',
-        description: '使用 Next.js SSR 技术在服务器端查询'
-      },
-      {
-        key: '3',
-        field: '查询时间',
-        value: new Date().toLocaleString(),
-        description: '服务器查询时间'
-      },
-      {
-        key: '4',
         field: '注册商',
-        value: '示例注册商 (服务端模拟数据)',
+        value: '获取失败',
         description: '域名注册服务商'
       },
       {
-        key: '5',
+        key: '3',
         field: '注册日期',
-        value: '2020-01-01',
+        value: '获取失败',
         description: '域名创建日期'
       },
       {
-        key: '6',
+        key: '4',
         field: '到期日期',
-        value: '2025-01-01',
+        value: '获取失败',
         description: '域名到期日期'
       },
       {
-        key: '7',
+        key: '5',
         field: '状态',
-        value: 'clientTransferProhibited',
+        value: '获取失败',
         description: '域名状态'
-      },
-      {
-        key: '8',
-        field: '实现说明',
-        value: '在实际项目中，你可以使用 whois 库获取真实数据',
-        description: '技术实现说明'
       }
     ];
 
@@ -265,14 +247,7 @@ async function fetchDnsRecords(domain: string): Promise<DnsRecord[]> {
       });
     }
 
-    // 添加一条说明，表明这是服务端查询
-    records.push({
-      key: 'server-info',
-      type: '说明',
-      name: domain,
-      value: '此信息由服务器端使用 Node.js DNS 模块直接查询，无需依赖第三方 API',
-      ttl: '-'
-    });
+    // 不再添加关于实现方式的说明
 
     return records;
   } catch (error) {
