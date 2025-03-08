@@ -22,7 +22,11 @@
     "incremental": true
   },
   "include": [
-    "src"
+    "pages",
+    "components",
+    "utils",
+    "styles",
+    "next-env.d.ts"
   ],
   "exclude": [
     "node_modules"
