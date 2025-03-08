@@ -141,8 +141,28 @@ const Base64Tool: React.FC = () => {
       <Title level={2}>Base64 编码/解码</Title>
 
       {/* 选项和操作按钮区域 */}
-      <Card style={{ marginBottom: 16 }}>
-        <Space size="middle">
+      <Row justify="space-between" align="middle" style={{ marginBottom: 16 }}>
+        {/* 左侧：编码和切换模式按钮 */}
+        <Col>
+          <Button
+            type="primary"
+            onClick={handleProcess}
+            size="middle"
+            style={{ marginRight: 8 }}
+          >
+            {mode === 'encode' ? '编码' : '解码'}
+          </Button>
+          <Button
+            icon={<SwapOutlined />}
+            onClick={handleSwitch}
+            size="middle"
+          >
+            切换模式
+          </Button>
+        </Col>
+
+        {/* 右侧：base64算法和填充选项 */}
+        <Col>
           <RadioGroup
             value={variant}
             onChange={(e) => {
@@ -152,6 +172,7 @@ const Base64Tool: React.FC = () => {
             }}
             optionType="button"
             buttonStyle="solid"
+            style={{ marginRight: 8 }}
           >
             <RadioButton value="standard">标准 Base64</RadioButton>
             <RadioButton value="urlsafe">URL 安全 Base64</RadioButton>
@@ -170,23 +191,8 @@ const Base64Tool: React.FC = () => {
             <RadioButton value="with-padding">使用填充 (=)</RadioButton>
             <RadioButton value="no-padding">不使用填充</RadioButton>
           </RadioGroup>
-
-          <Button
-            type="primary"
-            onClick={handleProcess}
-            size="middle"
-          >
-            {mode === 'encode' ? '编码' : '解码'}
-          </Button>
-          <Button
-            icon={<SwapOutlined />}
-            onClick={handleSwitch}
-            size="middle"
-          >
-            切换模式
-          </Button>
-        </Space>
-      </Card>
+        </Col>
+      </Row>
 
       {/* 输入区域 */}
       <Row gutter={[16, 16]}>
