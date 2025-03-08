@@ -1,6 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import dns from 'dns';
 import { promisify } from 'util';
+// 使用 any 类型导入 whois 模块
+// @ts-ignore
+import whois from 'whois';
 
 // 将 DNS 查询方法转换为 Promise 版本
 const resolveMx = promisify(dns.resolveMx);
@@ -67,18 +70,121 @@ export default async function handler(
   }
 }
 
+// 将 whois.lookup 转换为 Promise 版本
+const lookupPromise = (domain: string): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    whois.lookup(domain, (err: Error | null, data: string) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(data);
+      }
+    });
+  });
+};
+
+// 解析 WHOIS 信息
+function parseWhoisData(data: string): Record<string, string> {
+  const result: Record<string, string> = {};
+
+  // 常见的 WHOIS 字段映射
+  const fieldMappings: Record<string, string[]> = {
+    registrar: ['Registrar:', 'registrar:', 'Sponsoring Registrar:'],
+    creationDate: ['Creation Date:', 'created:', 'Created on:', 'Registration Date:'],
+    expirationDate: ['Expiration Date:', 'expires:', 'Registry Expiry Date:'],
+    status: ['Status:', 'Domain Status:'],
+    nameServers: ['Name Server:', 'nserver:'],
+  };
+
+  // 按行分割 WHOIS 数据
+  const lines = data.split('\n');
+
+  for (const line of lines) {
+    const trimmedLine = line.trim();
+
+    // 跳过空行和注释行
+    if (!trimmedLine || trimmedLine.startsWith('%') || trimmedLine.startsWith('#')) {
+      continue;
+    }
+
+    // 尝试匹配每个字段
+    for (const [field, patterns] of Object.entries(fieldMappings)) {
+      for (const pattern of patterns) {
+        if (trimmedLine.startsWith(pattern)) {
+          const value = trimmedLine.substring(pattern.length).trim();
+
+          // 如果字段已存在，可能是多行值（如 nameservers），则追加
+          if (result[field]) {
+            if (!result[field].includes(value)) {
+              result[field] += `, ${value}`;
+            }
+          } else {
+            result[field] = value;
+          }
+          break;
+        }
+      }
+    }
+  }
+
+  return result;
+}
+
 // 获取域名的 WHOIS 信息
 async function fetchWhoisInfo(domain: string): Promise<DomainInfo[]> {
   try {
-    // 在服务端，我们可以使用 whois 库来查询 WHOIS 信息
-    // 但由于这里是示例，我们模拟一些基本信息
+    // 使用 whois 库查询域名信息
+    const whoisData = await lookupPromise(domain);
 
-    // 在实际项目中，你可以安装 whois 库：
-    // npm install whois
-    // 然后使用它来查询真实的 WHOIS 信息
+    // 解析 WHOIS 数据
+    const parsedData = parseWhoisData(whoisData);
 
-    // 模拟 WHOIS 信息 - 只包含用户关心的域名信息
+    // 构建返回结果
     const info: DomainInfo[] = [
+      {
+        key: '1',
+        field: '域名',
+        value: domain,
+        description: '查询的域名'
+      },
+      {
+        key: '2',
+        field: '注册商',
+        value: parsedData.registrar || '获取失败',
+        description: '域名注册服务商'
+      },
+      {
+        key: '3',
+        field: '注册日期',
+        value: parsedData.creationDate || '获取失败',
+        description: '域名创建日期'
+      },
+      {
+        key: '4',
+        field: '到期日期',
+        value: parsedData.expirationDate || '获取失败',
+        description: '域名到期日期'
+      },
+      {
+        key: '5',
+        field: '状态',
+        value: parsedData.status || '获取失败',
+        description: '域名状态'
+      },
+      {
+        key: '6',
+        field: '域名服务器',
+        value: parsedData.nameServers || '获取失败',
+        description: '域名的 DNS 服务器'
+      }
+    ];
+
+    return info;
+  } catch (error) {
+    console.error('获取 WHOIS 信息失败:', error);
+
+    // 发生错误时返回基本信息
+    return [
       {
         key: '1',
         field: '域名',
@@ -110,11 +216,6 @@ async function fetchWhoisInfo(domain: string): Promise<DomainInfo[]> {
         description: '域名状态'
       }
     ];
-
-    return info;
-  } catch (error) {
-    console.error('获取 WHOIS 信息失败:', error);
-    return [];
   }
 }
 

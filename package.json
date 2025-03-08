@@ -28,7 +28,8 @@
     "remark-gfm": "^4.0.1",
     "stream-browserify": "^3.0.0",
     "typescript": "^4.9.5",
-    "vm-browserify": "^1.1.2"
+    "vm-browserify": "^1.1.2",
+    "whois": "^2.14.2"
   },
   "scripts": {
     "start": "next start",
