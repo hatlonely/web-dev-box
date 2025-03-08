@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Input, Button, Row, Col, Space, Typography, message, Select, Card } from 'antd';
-import { CopyOutlined } from '@ant-design/icons';
+import { Input, Button, Row, Col, Space, Typography, message, Radio, Card } from 'antd';
+import { CopyOutlined, FileTextOutlined, DeleteOutlined } from '@ant-design/icons';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -20,33 +20,16 @@ import {
 
 const { TextArea } = Input;
 const { Title, Text } = Typography;
-const { Option } = Select;
+const { Group: RadioGroup, Button: RadioButton } = Radio;
 
 // 定义主题类型
 type ThemeType = 'light' | 'dark';
 
-// 定义主题选项
-interface ThemeOption {
-  label: string;
-  value: string;
-  type: ThemeType;
-  style: any;
-}
-
-// 可用的代码高亮主题
-const codeThemes: ThemeOption[] = [
-  { label: 'VS Code (暗色)', value: 'vscDarkPlus', type: 'dark', style: vscDarkPlus },
-  { label: 'VS Code (亮色)', value: 'vs', type: 'light', style: vs },
-  { label: 'Dracula', value: 'dracula', type: 'dark', style: dracula },
-  { label: 'Atom Dark', value: 'atomDark', type: 'dark', style: atomDark },
-  { label: 'Material Light', value: 'materialLight', type: 'light', style: materialLight },
-  { label: 'Material Dark', value: 'materialDark', type: 'dark', style: materialDark },
-  { label: 'Nord', value: 'nord', type: 'dark', style: nord },
-  { label: 'Solarized Light', value: 'solarizedlight', type: 'light', style: solarizedlight },
-  { label: 'Solarized Dark', value: 'solarizedDarkAtom', type: 'dark', style: solarizedDarkAtom },
-  { label: 'One Dark', value: 'oneDark', type: 'dark', style: oneDark },
-  { label: 'One Light', value: 'oneLight', type: 'light', style: oneLight },
-];
+// 定义代码高亮主题映射
+const codeThemeMap = {
+  light: { value: 'oneLight', style: oneLight },
+  dark: { value: 'vscDarkPlus', style: vscDarkPlus }
+};
 
 // Markdown主题样式
 const markdownThemes = {
@@ -86,8 +69,7 @@ const markdownThemes = {
 
 const MarkdownPreviewTool: React.FC = () => {
   const [markdown, setMarkdown] = useState('');
-  const [codeTheme, setCodeTheme] = useState<string>('vscDarkPlus');
-  const [markdownTheme, setMarkdownTheme] = useState<ThemeType>('light');
+  const [theme, setTheme] = useState<ThemeType>('light');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMarkdown(e.target.value);
@@ -103,17 +85,8 @@ const MarkdownPreviewTool: React.FC = () => {
     setMarkdown('');
   };
 
-  const handleCodeThemeChange = (value: string) => {
-    setCodeTheme(value);
-    // 根据代码主题自动设置Markdown主题
-    const selectedTheme = codeThemes.find(theme => theme.value === value);
-    if (selectedTheme) {
-      setMarkdownTheme(selectedTheme.type);
-    }
-  };
-
-  const handleMarkdownThemeChange = (value: ThemeType) => {
-    setMarkdownTheme(value);
+  const handleThemeChange = (e: any) => {
+    setTheme(e.target.value);
   };
 
   const handleSampleData = () => {
@@ -222,13 +195,12 @@ public class Greeting {
 
   // 获取当前选中的代码主题样式
   const getSelectedCodeThemeStyle = () => {
-    const selectedTheme = codeThemes.find(theme => theme.value === codeTheme);
-    return selectedTheme ? selectedTheme.style : vscDarkPlus;
+    return codeThemeMap[theme].style;
   };
 
   // 获取当前选中的Markdown主题样式
   const getSelectedMarkdownThemeStyle = () => {
-    return markdownThemes[markdownTheme];
+    return markdownThemes[theme];
   };
 
   // 自定义代码渲染组件
@@ -254,46 +226,37 @@ public class Greeting {
     <div style={{ padding: 24 }}>
       <Title level={2}>Markdown 预览</Title>
 
-      <Row gutter={[16, 16]} align="middle">
-        <Col span={6}>
-          <Space>
-            <Text strong>Markdown主题：</Text>
-            <Select
-              value={markdownTheme}
-              onChange={handleMarkdownThemeChange}
-              style={{ width: 120 }}
-            >
-              <Option value="light">亮色主题</Option>
-              <Option value="dark">暗色主题</Option>
-            </Select>
-          </Space>
-        </Col>
+      <Row gutter={[16, 16]} align="middle" style={{ marginBottom: 16 }}>
         <Col span={8}>
-          <Space>
-            <Text strong>代码高亮主题：</Text>
-            <Select
-              value={codeTheme}
-              onChange={handleCodeThemeChange}
-              style={{ width: 180 }}
-            >
-              {codeThemes.map(theme => (
-                <Option key={theme.value} value={theme.value}>{theme.label}</Option>
-              ))}
-            </Select>
+          <Space align="center">
+            <Text strong>主题：</Text>
+            <RadioGroup value={theme} onChange={handleThemeChange} optionType="button" buttonStyle="solid">
+              <RadioButton value="light">亮色</RadioButton>
+              <RadioButton value="dark">暗色</RadioButton>
+            </RadioGroup>
           </Space>
         </Col>
-        <Col span={10}>
+        <Col span={16} style={{ textAlign: 'right' }}>
           <Space>
-            <Button onClick={handleSampleData}>
+            <Button
+              type="primary"
+              icon={<FileTextOutlined />}
+              onClick={handleSampleData}
+            >
               示例数据
             </Button>
-            <Button onClick={handleClear}>
+            <Button
+              icon={<DeleteOutlined />}
+              onClick={handleClear}
+              danger
+            >
               清空
             </Button>
             <Button
               icon={<CopyOutlined />}
               onClick={handleCopy}
               disabled={!markdown}
+              type="default"
             >
               复制
             </Button>
@@ -358,22 +321,12 @@ public class Greeting {
           <ul>
             <li>
               <Text>
-                在<strong>编辑</strong>选项卡中输入Markdown文本
+                在<strong>左侧编辑区域</strong>输入Markdown文本，右侧实时预览渲染效果
               </Text>
             </li>
             <li>
               <Text>
-                切换到<strong>预览</strong>选项卡查看渲染后的效果
-              </Text>
-            </li>
-            <li>
-              <Text>
-                选择<strong>Markdown主题</strong>可以切换预览区域的整体风格
-              </Text>
-            </li>
-            <li>
-              <Text>
-                选择<strong>代码高亮主题</strong>可以更改代码块的语法高亮样式
+                选择<strong>亮色/暗色主题</strong>可以切换整体风格，包括预览区域和代码高亮
               </Text>
             </li>
             <li>
