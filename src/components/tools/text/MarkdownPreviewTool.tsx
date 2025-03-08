@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input, Button, Row, Col, Space, Typography, message, Tabs, Select, Card } from 'antd';
+import { Input, Button, Row, Col, Space, Typography, message, Select, Card } from 'antd';
 import { CopyOutlined } from '@ant-design/icons';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -21,7 +21,6 @@ import {
 const { TextArea } = Input;
 const { Title, Text } = Typography;
 const { Option } = Select;
-const { TabPane } = Tabs;
 
 // 定义主题类型
 type ThemeType = 'light' | 'dark';
@@ -87,7 +86,6 @@ const markdownThemes = {
 
 const MarkdownPreviewTool: React.FC = () => {
   const [markdown, setMarkdown] = useState('');
-  const [activeTab, setActiveTab] = useState('edit');
   const [codeTheme, setCodeTheme] = useState<string>('vscDarkPlus');
   const [markdownTheme, setMarkdownTheme] = useState<ThemeType>('light');
 
@@ -256,8 +254,8 @@ public class Greeting {
     <div style={{ padding: 24 }}>
       <Title level={2}>Markdown 预览</Title>
 
-      <Row gutter={[16, 16]}>
-        <Col span={12}>
+      <Row gutter={[16, 16]} align="middle">
+        <Col span={6}>
           <Space>
             <Text strong>Markdown主题：</Text>
             <Select
@@ -270,7 +268,7 @@ public class Greeting {
             </Select>
           </Space>
         </Col>
-        <Col span={12}>
+        <Col span={8}>
           <Space>
             <Text strong>代码高亮主题：</Text>
             <Select
@@ -284,71 +282,74 @@ public class Greeting {
             </Select>
           </Space>
         </Col>
+        <Col span={10}>
+          <Space>
+            <Button onClick={handleSampleData}>
+              示例数据
+            </Button>
+            <Button onClick={handleClear}>
+              清空
+            </Button>
+            <Button
+              icon={<CopyOutlined />}
+              onClick={handleCopy}
+              disabled={!markdown}
+            >
+              复制
+            </Button>
+          </Space>
+        </Col>
       </Row>
 
       <Card style={{ marginTop: 16 }}>
-        <Tabs
-          activeKey={activeTab}
-          onChange={setActiveTab}
-          type="card"
-          style={{ marginBottom: 16 }}
-        >
-          <TabPane tab="编辑" key="edit">
-            <Row gutter={[16, 16]}>
-              <Col span={24}>
-                <TextArea
-                  rows={20}
-                  value={markdown}
-                  onChange={handleInputChange}
-                  placeholder="输入Markdown文本"
-                  style={{ fontFamily: 'monospace' }}
-                />
-              </Col>
-
-              <Col span={24}>
-                <Space>
-                  <Button onClick={handleSampleData}>
-                    示例数据
-                  </Button>
-                  <Button onClick={handleClear}>
-                    清空
-                  </Button>
-                  <Button
-                    icon={<CopyOutlined />}
-                    onClick={handleCopy}
-                    disabled={!markdown}
-                  >
-                    复制
-                  </Button>
-                </Space>
-              </Col>
-            </Row>
-          </TabPane>
-          <TabPane tab="预览" key="preview">
-            <div
-              style={{
-                border: '1px solid #d9d9d9',
-                borderRadius: 4,
-                minHeight: 400,
-                overflow: 'auto',
-                ...getSelectedMarkdownThemeStyle()
-              }}
-            >
-              {markdown ? (
-                <ReactMarkdown
-                  remarkPlugins={[remarkGfm]}
-                  components={{
-                    code: CodeBlock
-                  }}
-                >
-                  {markdown}
-                </ReactMarkdown>
-              ) : (
-                <Text type="secondary">预览区域为空，请在编辑选项卡中输入Markdown文本</Text>
-              )}
+        <Row gutter={16}>
+          {/* 左侧编辑区域 */}
+          <Col span={12}>
+            <div style={{ borderRight: '1px solid #f0f0f0', paddingRight: 16 }}>
+              <div style={{ marginBottom: 8 }}>
+                <Text strong>编辑</Text>
+              </div>
+              <TextArea
+                autoSize={{ minRows: 15 }}
+                value={markdown}
+                onChange={handleInputChange}
+                placeholder="输入Markdown文本"
+                style={{ fontFamily: 'monospace', width: '100%' }}
+              />
             </div>
-          </TabPane>
-        </Tabs>
+          </Col>
+
+          {/* 右侧预览区域 */}
+          <Col span={12}>
+            <div>
+              <div style={{ marginBottom: 8 }}>
+                <Text strong>预览</Text>
+              </div>
+              <div
+                style={{
+                  border: '1px solid #d9d9d9',
+                  borderRadius: 4,
+                  minHeight: 300,
+                  width: '100%',
+                  ...getSelectedMarkdownThemeStyle()
+                }}
+              >
+                {markdown ? (
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    components={{
+                      code: CodeBlock
+                    }}
+                  >
+                    {markdown}
+                  </ReactMarkdown>
+                ) : (
+                  <Text type="secondary">预览区域为空，请在左侧输入Markdown文本</Text>
+                )}
+              </div>
+            </div>
+          </Col>
+        </Row>
       </Card>
 
       <Row style={{ marginTop: 24 }}>
