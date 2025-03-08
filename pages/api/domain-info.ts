@@ -150,31 +150,31 @@ async function fetchWhoisInfo(domain: string): Promise<DomainInfo[]> {
       {
         key: '2',
         field: '注册商',
-        value: parsedData.registrar || '获取失败',
+        value: parsedData.registrar || '未知',
         description: '域名注册服务商'
       },
       {
         key: '3',
         field: '注册日期',
-        value: parsedData.creationDate || '获取失败',
+        value: parsedData.creationDate || '未知',
         description: '域名创建日期'
       },
       {
         key: '4',
         field: '到期日期',
-        value: parsedData.expirationDate || '获取失败',
+        value: parsedData.expirationDate || '未知',
         description: '域名到期日期'
       },
       {
         key: '5',
         field: '状态',
-        value: parsedData.status || '获取失败',
+        value: parsedData.status || '未知',
         description: '域名状态'
       },
       {
         key: '6',
         field: '域名服务器',
-        value: parsedData.nameServers || '获取失败',
+        value: parsedData.nameServers || '未知',
         description: '域名的 DNS 服务器'
       }
     ];
@@ -194,25 +194,25 @@ async function fetchWhoisInfo(domain: string): Promise<DomainInfo[]> {
       {
         key: '2',
         field: '注册商',
-        value: '获取失败',
+        value: '未知',
         description: '域名注册服务商'
       },
       {
         key: '3',
         field: '注册日期',
-        value: '获取失败',
+        value: '未知',
         description: '域名创建日期'
       },
       {
         key: '4',
         field: '到期日期',
-        value: '获取失败',
+        value: '未知',
         description: '域名到期日期'
       },
       {
         key: '5',
         field: '状态',
-        value: '获取失败',
+        value: '未知',
         description: '域名状态'
       }
     ];
