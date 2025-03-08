@@ -21,7 +21,7 @@ info:
 	@docker images | grep $(REGISTRY_ENDPOINT)/$(REGISTRY_NAMESPACE)/$(REPOSITORY) || true
 
 run: build stop
-	docker run -d --rm -p $(HOST_PORT):80 --name $(REPOSITORY) $(REGISTRY_ENDPOINT)/$(REGISTRY_NAMESPACE)/$(REPOSITORY):$(VERSION)
+	docker run -d --rm -p $(HOST_PORT):3000 --name $(REPOSITORY) $(REGISTRY_ENDPOINT)/$(REGISTRY_NAMESPACE)/$(REPOSITORY):$(VERSION)
 
 stop:
 	docker stop $(REPOSITORY) || true
