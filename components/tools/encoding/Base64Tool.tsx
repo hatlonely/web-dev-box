@@ -229,7 +229,8 @@ const Base64Tool: React.FC = () => {
 
       {/* 说明区域 */}
       <Divider />
-      <Card title={<><InfoCircleOutlined /> Base64 编码说明</>}>
+      <div style={{ marginTop: 16 }}>
+        <Title level={4}>Base64 编码说明</Title>
         <Paragraph>
           Base64 是一种基于 64 个可打印字符来表示二进制数据的编码方式，常用于在 HTTP 环境下传输二进制数据。
         </Paragraph>
@@ -257,7 +258,7 @@ const Base64Tool: React.FC = () => {
         <Paragraph>
           <Text type="secondary">注意：解码时会自动处理填充问题，无论输入是否有填充都能正确解码。</Text>
         </Paragraph>
-      </Card>
+      </div>
     </div>
   );
 };
