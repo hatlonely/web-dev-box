@@ -124,16 +124,39 @@ const Base64Tool: React.FC = () => {
     setDebugInfo(`模式切换为: ${mode === 'encode' ? '解码' : '编码'}`);
   };
 
+  // 复制结果
   const handleCopy = () => {
-    navigator.clipboard.writeText(output)
-      .then(() => {
+    // 创建一个文本区域元素来执行复制操作
+    const textArea = document.createElement('textarea');
+    textArea.value = output;
+
+    // 确保文本区域不可见
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    textArea.style.top = '-999999px';
+    document.body.appendChild(textArea);
+
+    try {
+      // 选择文本并尝试复制
+      textArea.focus();
+      textArea.select();
+
+      const successful = document.execCommand('copy');
+      if (successful) {
         message.success('已复制到剪贴板');
         setDebugInfo('复制成功');
-      })
-      .catch(() => {
-        message.error('复制失败');
+      } else {
+        message.error('复制失败，请手动复制');
         setDebugInfo('复制失败');
-      });
+      }
+    } catch (err) {
+      console.error('复制过程中发生错误:', err);
+      message.error('复制失败，请手动复制');
+      setDebugInfo('复制过程中发生错误');
+    } finally {
+      // 清理DOM
+      document.body.removeChild(textArea);
+    }
   };
 
   return (

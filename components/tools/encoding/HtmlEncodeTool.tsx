@@ -70,10 +70,36 @@ const HtmlEncodeTool: React.FC = () => {
     setOutput('');
   };
 
+  // 复制结果
   const handleCopy = () => {
-    navigator.clipboard.writeText(output)
-      .then(() => message.success('已复制到剪贴板'))
-      .catch(() => message.error('复制失败'));
+    // 创建一个文本区域元素来执行复制操作
+    const textArea = document.createElement('textarea');
+    textArea.value = output;
+
+    // 确保文本区域不可见
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    textArea.style.top = '-999999px';
+    document.body.appendChild(textArea);
+
+    try {
+      // 选择文本并尝试复制
+      textArea.focus();
+      textArea.select();
+
+      const successful = document.execCommand('copy');
+      if (successful) {
+        message.success('已复制到剪贴板');
+      } else {
+        message.error('复制失败，请手动复制');
+      }
+    } catch (err) {
+      console.error('复制过程中发生错误:', err);
+      message.error('复制失败，请手动复制');
+    } finally {
+      // 清理DOM
+      document.body.removeChild(textArea);
+    }
   };
 
   const handleClear = () => {
@@ -161,7 +187,7 @@ const HtmlEncodeTool: React.FC = () => {
       {/* 说明区域 */}
       <Divider />
       <div style={{ marginTop: 16 }}>
-        <Title level={4}><InfoCircleOutlined /> HTML编码说明</Title>
+        <Title level={4}>HTML编码说明</Title>
         <Paragraph>
           HTML编码用于将特殊字符转换为HTML实体，以便在HTML文档中安全地显示这些字符。
         </Paragraph>

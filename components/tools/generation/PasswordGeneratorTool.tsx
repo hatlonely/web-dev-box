@@ -118,9 +118,34 @@ const PasswordGeneratorTool: React.FC = () => {
 
   // 复制密码
   const handleCopy = () => {
-    navigator.clipboard.writeText(password)
-      .then(() => message.success('密码已复制到剪贴板'))
-      .catch(() => message.error('复制失败'));
+    // 创建一个文本区域元素来执行复制操作
+    const textArea = document.createElement('textarea');
+    textArea.value = password;
+
+    // 确保文本区域不可见
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    textArea.style.top = '-999999px';
+    document.body.appendChild(textArea);
+
+    try {
+      // 选择文本并尝试复制
+      textArea.focus();
+      textArea.select();
+
+      const successful = document.execCommand('copy');
+      if (successful) {
+        message.success('密码已复制到剪贴板');
+      } else {
+        message.error('复制失败，请手动复制密码');
+      }
+    } catch (err) {
+      console.error('复制过程中发生错误:', err);
+      message.error('复制失败，请手动复制密码');
+    } finally {
+      // 清理DOM
+      document.body.removeChild(textArea);
+    }
   };
 
   // 初始生成密码
