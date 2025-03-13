@@ -48,7 +48,13 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       </Header>
 
       <Content style={{ padding: isMobile ? '0 12px' : '0 24px', marginTop: 16 }}>
-        {children}
+        <div style={{
+          maxWidth: '1200px',
+          margin: '0 auto',
+          width: '100%'
+        }}>
+          {children}
+        </div>
       </Content>
 
       <Footer style={{ textAlign: 'center' }}>
