@@ -20,6 +20,7 @@ import {
   GlobalOutlined,
   CloudServerOutlined,
   CalculatorOutlined,
+  DiffOutlined,
 } from '@ant-design/icons';
 // 导入工具组件
 // 编码/解码工具
@@ -41,6 +42,7 @@ import JsonYamlTool from '../components/tools/conversion/JsonYamlTool';
 // 格式化工具
 import JsonFormatterTool from '../components/tools/formatter/JsonFormatterTool';
 import XmlFormatterTool from '../components/tools/formatter/XmlFormatterTool';
+import JsonDiffTool from '../components/tools/formatter/JsonDiffTool';
 
 // 生成工具
 import PasswordGeneratorTool from '../components/tools/generation/PasswordGeneratorTool';
@@ -135,6 +137,14 @@ export const tools: Tool[] = [
     icon: 'FormatPainterOutlined',
     category: ToolCategory.FORMATTER,
     component: JsonFormatterTool,
+  },
+  {
+    id: 'json-diff',
+    name: 'JSON Diff 对比',
+    description: '比较两个JSON之间的差异，自动处理键顺序不一致的问题',
+    icon: 'DiffOutlined',
+    category: ToolCategory.FORMATTER,
+    component: JsonDiffTool,
   },
   {
     id: 'xml-formatter',
@@ -269,6 +279,8 @@ export const getToolIcon = (iconName: string): React.ReactNode => {
       return <CloudServerOutlined />;
     case 'CalculatorOutlined':
       return <CalculatorOutlined />;
+    case 'DiffOutlined':
+      return <DiffOutlined />;
     default:
       return <CodeOutlined />;
   }

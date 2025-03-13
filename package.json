@@ -31,9 +31,17 @@
     "vm-browserify": "^1.1.2",
     "whois": "^2.14.2"
   },
+  "devDependencies": {
+    "@playwright/test": "^1.42.1",
+    "@types/node": "^16.18.126"
+  },
   "scripts": {
     "start": "next start",
     "build": "next build",
-    "dev": "next dev"
+    "dev": "next dev",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:json-diff": "playwright test json-diff.spec.ts"
   }
 }
