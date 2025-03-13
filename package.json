@@ -32,7 +32,7 @@
     "whois": "^2.14.2"
   },
   "devDependencies": {
-    "@playwright/test": "^1.42.1",
+    "@playwright/test": "^1.51.0",
     "@types/node": "^16.18.126"
   },
   "scripts": {

@@ -89,14 +89,14 @@ test.describe('JSON Diff Tool Tests', () => {
     // 等待比较结果显示
     await page.waitForSelector('h4:has-text("比较结果")');
     
-    // 验证差异结果
-    const diffResults = await page.locator('div[style*="backgroundColor"]').allTextContents();
+    // 验证差异结果 - 现在是表格行
+    const diffRows = await page.locator('table tbody tr').count();
     
     // 应该有4个差异: value变化, status删除, items新增元素, newField新增
-    expect(diffResults.length).toBeGreaterThanOrEqual(4);
+    expect(diffRows).toBeGreaterThanOrEqual(4);
     
     // 验证是否包含预期的差异信息
-    const diffText = await page.textContent('div.ant-card-body');
+    const diffText = await page.textContent('table');
     expect(diffText).toContain('value');
     expect(diffText).toContain('123');
     expect(diffText).toContain('456');

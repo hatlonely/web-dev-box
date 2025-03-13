@@ -87,24 +87,19 @@ const JsonDiffTool: React.FC = () => {
 
   // 复制结果
   const handleCopy = () => {
-    const diffText = diffResult
-      .map(item => {
-        const pathStr = item.path.join('.');
-        const prefix = item.path.length > 0 ? `${pathStr}: ` : '';
-        
-        switch (item.type) {
-          case 'added':
-            return `+ ${prefix}${JSON.stringify(item.rightValue)}`;
-          case 'removed':
-            return `- ${prefix}${JSON.stringify(item.leftValue)}`;
-          case 'changed':
-            return `~ ${prefix}${JSON.stringify(item.leftValue)} -> ${JSON.stringify(item.rightValue)}`;
-          default:
-            return '';
-        }
-      })
-      .filter(line => line)
-      .join('\n');
+    // 创建表格格式的文本
+    let diffText = '字段路径\t旧值\t新值\n';
+    diffText += '-'.repeat(80) + '\n';
+    
+    diffResult.forEach(item => {
+      const pathStr = item.path.join('.') || 'root';
+      const typeLabel = getDiffLabel(item.type);
+      const leftValue = item.type === 'added' ? '--' : formatJsonValue(item.leftValue);
+      const rightValue = item.type === 'removed' ? '--' : formatJsonValue(item.rightValue);
+      
+      // 使用制表符分隔列，方便粘贴到表格软件
+      diffText += `[${typeLabel}] ${pathStr}\t${leftValue}\t${rightValue}\n`;
+    });
 
     navigator.clipboard.writeText(diffText)
       .then(() => message.success('已复制到剪贴板'))
@@ -251,15 +246,15 @@ const JsonDiffTool: React.FC = () => {
     }
   };
 
-  // 根据diff类型返回样式
-  const getDiffStyle = (type: DiffType) => {
+  // 根据diff类型返回行样式
+  const getRowStyle = (type: DiffType) => {
     switch (type) {
       case 'added':
-        return { backgroundColor: 'rgba(46, 204, 113, 0.2)', padding: '2px 4px', borderRadius: '2px' };
+        return { backgroundColor: 'rgba(46, 204, 113, 0.1)' };
       case 'removed':
-        return { backgroundColor: 'rgba(231, 76, 60, 0.2)', padding: '2px 4px', borderRadius: '2px' };
+        return { backgroundColor: 'rgba(231, 76, 60, 0.1)' };
       case 'changed':
-        return { backgroundColor: 'rgba(241, 196, 15, 0.2)', padding: '2px 4px', borderRadius: '2px' };
+        return { backgroundColor: 'rgba(241, 196, 15, 0.1)' };
       default:
         return {};
     }
@@ -276,6 +271,37 @@ const JsonDiffTool: React.FC = () => {
         return '修改';
       default:
         return '';
+    }
+  };
+
+  // 格式化JSON值显示
+  const formatJsonValue = (value: any): string => {
+    if (value === undefined) {
+      return 'undefined';
+    }
+    
+    if (value === null) {
+      return 'null';
+    }
+    
+    if (typeof value === 'object') {
+      return JSON.stringify(value, null, 2);
+    }
+    
+    return JSON.stringify(value);
+  };
+
+  // 获取表格行的类型样式
+  const getTypeTag = (type: DiffType) => {
+    switch (type) {
+      case 'added':
+        return <Text type="success">[{getDiffLabel(type)}]</Text>;
+      case 'removed':
+        return <Text type="danger">[{getDiffLabel(type)}]</Text>;
+      case 'changed':
+        return <Text type="warning">[{getDiffLabel(type)}]</Text>;
+      default:
+        return null;
     }
   };
 
@@ -355,41 +381,42 @@ const JsonDiffTool: React.FC = () => {
           {diffResult.length === 0 ? (
             <Text>进行比较后，结果将显示在这里</Text>
           ) : (
-            <Card style={{ maxHeight: '400px', overflow: 'auto' }}>
-              {diffResult.map((diff, index) => (
-                <div key={index} style={{ marginBottom: 8 }}>
-                  <div style={getDiffStyle(diff.type)}>
-                    <Text style={{ marginRight: 8 }}>
-                      <strong>{diff.path.join('.') || 'root'}</strong>
-                    </Text>
-                    <Text
-                      type={
-                        diff.type === 'added' 
-                          ? 'success' 
-                          : diff.type === 'removed' 
-                            ? 'danger' 
-                            : diff.type === 'changed' 
-                              ? 'warning' 
-                              : undefined
-                      }
-                    >
-                      [{getDiffLabel(diff.type)}]
-                    </Text>
-                    {diff.type === 'added' && (
-                      <div>新值: {JSON.stringify(diff.rightValue)}</div>
-                    )}
-                    {diff.type === 'removed' && (
-                      <div>旧值: {JSON.stringify(diff.leftValue)}</div>
-                    )}
-                    {diff.type === 'changed' && (
-                      <div>
-                        <div>旧值: {JSON.stringify(diff.leftValue)}</div>
-                        <div>新值: {JSON.stringify(diff.rightValue)}</div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
+            <Card style={{ maxHeight: '500px', overflow: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead>
+                  <tr style={{ backgroundColor: '#f5f5f5' }}>
+                    <th style={{ padding: '10px', textAlign: 'left', borderBottom: '1px solid #e8e8e8', width: '30%' }}>字段路径</th>
+                    <th style={{ padding: '10px', textAlign: 'left', borderBottom: '1px solid #e8e8e8', width: '35%' }}>旧值</th>
+                    <th style={{ padding: '10px', textAlign: 'left', borderBottom: '1px solid #e8e8e8', width: '35%' }}>新值</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {diffResult.map((diff, index) => (
+                    <tr key={index} style={{ ...getRowStyle(diff.type), borderBottom: '1px solid #e8e8e8' }}>
+                      <td style={{ padding: '10px', verticalAlign: 'top' }}>
+                        <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+                          <span style={{ marginRight: '8px' }}>{getTypeTag(diff.type)}</span>
+                          <strong>{diff.path.join('.') || 'root'}</strong>
+                        </div>
+                      </td>
+                      <td style={{ padding: '10px', verticalAlign: 'top', fontFamily: 'monospace', whiteSpace: 'pre-wrap' }}>
+                        {diff.type === 'added' ? (
+                          <Text type="secondary">--</Text>
+                        ) : (
+                          <pre style={{ margin: 0, fontSize: '13px' }}>{formatJsonValue(diff.leftValue)}</pre>
+                        )}
+                      </td>
+                      <td style={{ padding: '10px', verticalAlign: 'top', fontFamily: 'monospace', whiteSpace: 'pre-wrap' }}>
+                        {diff.type === 'removed' ? (
+                          <Text type="secondary">--</Text>
+                        ) : (
+                          <pre style={{ margin: 0, fontSize: '13px' }}>{formatJsonValue(diff.rightValue)}</pre>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </Card>
           )}
         </Col>
@@ -410,20 +437,25 @@ const JsonDiffTool: React.FC = () => {
               </Text>
             </li>
             <li>
-              <Text>
-                <strong>绿色</strong>表示在右侧JSON中新增的内容
-              </Text>
+            <Text>
+            <Text type="success">[新增]</Text> 表示在右侧JSON中新增的内容（绿色背景）
+            </Text>
             </li>
             <li>
-              <Text>
-                <strong>红色</strong>表示在右侧JSON中删除的内容
-              </Text>
+            <Text>
+            <Text type="danger">[删除]</Text> 表示在右侧JSON中删除的内容（红色背景）
+            </Text>
             </li>
             <li>
-              <Text>
-                <strong>黄色</strong>表示在两侧JSON中修改的内容
-              </Text>
+            <Text>
+            <Text type="warning">[修改]</Text> 表示在两侧JSON中修改的内容（黄色背景）
+            </Text>
             </li>
+              <li>
+                <Text>
+                  复杂的对象或数组值会自动格式化为多行显示
+                </Text>
+              </li>
             <li>
               <Text>
                 工具会自动处理JSON键顺序不一致的问题，确保准确比较
