@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useState, useEffect } from 'react';
 import { Layout, Menu, Typography } from 'antd';
 import { HomeOutlined, ToolOutlined } from '@ant-design/icons';
 import Link from 'next/link';
@@ -11,6 +11,24 @@ interface MainLayoutProps {
 }
 
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  // 检测屏幕尺寸变化
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    // 初始检查
+    checkIfMobile();
+
+    // 监听窗口大小变化
+    window.addEventListener('resize', checkIfMobile);
+
+    // 清理监听器
+    return () => window.removeEventListener('resize', checkIfMobile);
+  }, []);
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Header style={{ position: 'sticky', top: 0, zIndex: 1, width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -29,7 +47,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         </div>
       </Header>
 
-      <Content style={{ padding: '0 50px', marginTop: 16 }}>
+      <Content style={{ padding: isMobile ? '0 12px' : '0 24px', marginTop: 16 }}>
         {children}
       </Content>
 

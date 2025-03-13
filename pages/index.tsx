@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Input, Row, Col, Card, Tabs, Empty, Divider } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
@@ -10,11 +10,26 @@ const HomePage: React.FC = () => {
   const [searchKeyword, setSearchKeyword] = useState('');
   const [filteredTools, setFilteredTools] = useState<Tool[]>(tools);
   const [categories, setCategories] = useState<ToolCategory[]>([]);
+  const [isMobile, setIsMobile] = useState(false);
   const router = useRouter();
+
+  // 检测屏幕尺寸变化
+  const checkIfMobile = useCallback(() => {
+    setIsMobile(window.innerWidth <= 768);
+  }, []);
 
   useEffect(() => {
     setCategories(getAllCategories());
-  }, []);
+
+    // 初始检查
+    checkIfMobile();
+
+    // 监听窗口大小变化
+    window.addEventListener('resize', checkIfMobile);
+
+    // 清理监听器
+    return () => window.removeEventListener('resize', checkIfMobile);
+  }, [checkIfMobile]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const keyword = e.target.value;
@@ -70,7 +85,7 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <div style={{ padding: 24 }}>
+    <div style={{ padding: isMobile ? 12 : 24 }}>
       <Card style={{ marginBottom: 24 }}>
         <Input
           size="large"

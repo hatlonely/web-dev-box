@@ -11,7 +11,7 @@ const ToolCard: React.FC<ToolCardProps> = ({ tool, onClick }) => {
   return (
     <Card
       hoverable
-      style={{ width: 240, marginBottom: 16 }}
+      style={{ width: '100%', marginBottom: 16 }}
       cover={
         <div style={{
           display: 'flex',
