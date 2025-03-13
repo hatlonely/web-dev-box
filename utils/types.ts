@@ -8,6 +8,7 @@ export enum ToolCategory {
   TESTER = '测试工具',
   TEXT = '文本工具',
   NETWORK = '网络工具',
+  CALCULATION = '计算工具',
 }
 
 export interface Tool {

@@ -19,6 +19,7 @@ import {
   DatabaseOutlined,
   GlobalOutlined,
   CloudServerOutlined,
+  CalculatorOutlined,
 } from '@ant-design/icons';
 // 导入工具组件
 // 编码/解码工具
@@ -52,6 +53,9 @@ import RegexTesterTool from '../components/tools/tester/RegexTesterTool';
 
 // 文本工具
 import MarkdownPreviewTool from '../components/tools/text/MarkdownPreviewTool';
+
+// 计算工具
+import CalculatorTool from '../components/tools/calculation/CalculatorTool';
 
 // 注册所有工具
 export const tools: Tool[] = [
@@ -212,6 +216,16 @@ export const tools: Tool[] = [
     category: ToolCategory.NETWORK,
     component: DomainInfoTool,
   },
+  
+  // 计算工具
+  {
+    id: 'calculator',
+    name: '计算器',
+    description: '功能齐全的计算器工具，支持基本运算、内存功能和科学计算',
+    icon: 'CalculatorOutlined',
+    category: ToolCategory.CALCULATION,
+    component: CalculatorTool,
+  },
 ];
 
 // 获取工具图标组件
@@ -253,6 +267,8 @@ export const getToolIcon = (iconName: string): React.ReactNode => {
       return <GlobalOutlined />;
     case 'CloudServerOutlined':
       return <CloudServerOutlined />;
+    case 'CalculatorOutlined':
+      return <CalculatorOutlined />;
     default:
       return <CodeOutlined />;
   }
