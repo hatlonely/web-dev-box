@@ -19,14 +19,20 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
-    "incremental": true
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
-    "pages",
     "components",
-    "utils",
+    "next-env.d.ts",
+    "pages",
     "styles",
-    "next-env.d.ts"
+    "utils",
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"
