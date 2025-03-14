@@ -38,6 +38,7 @@ import DomainInfoTool from '../components/tools/network/DomainInfoTool';
 import TimestampTool from '../components/tools/conversion/TimestampTool';
 import BaseConversionTool from '../components/tools/conversion/BaseConversionTool';
 import JsonYamlTool from '../components/tools/conversion/JsonYamlTool';
+import CrontabTool from '../components/tools/conversion/CrontabTool';
 
 // 格式化工具
 import JsonFormatterTool from '../components/tools/formatter/JsonFormatterTool';
@@ -127,6 +128,14 @@ export const tools: Tool[] = [
     icon: 'SwapOutlined',
     category: ToolCategory.CONVERSION,
     component: JsonYamlTool,
+  },
+  {
+    id: 'crontab',
+    name: 'Crontab 计算器',
+    description: '解析 cron 表达式并计算未来执行时间',
+    icon: 'FieldTimeOutlined',
+    category: ToolCategory.CONVERSION,
+    component: CrontabTool,
   },
 
   // 格式化工具

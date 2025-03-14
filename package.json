@@ -13,6 +13,7 @@
     "antd": "^5.24.3",
     "bson": "^6.10.3",
     "buffer": "^6.0.3",
+    "cron-parser": "^5.0.4",
     "crypto-browserify": "^3.12.1",
     "dayjs": "^1.11.13",
     "js-yaml": "^4.1.0",
